@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import styled from "styled-components";
+import GlobalStyles from "./components/GlobalStyles";
+import LoginPage from "./pages/LoginPage";
+import { Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Todo from "./pages/Todo";
+import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
+  const { isLoggedIn } = useSelector((state) => state.user);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContainer>
+      <GlobalStyles />
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/todo"
+          element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <Todo />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </AppContainer>
   );
 }
+
+const AppContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+`;
 
 export default App;
